@@ -1,0 +1,21 @@
+import React, { useState } from "react";
+import { E_Screens } from "./utils/enum";
+
+const DaylightContext = React.createContext({});
+
+export const MainContext = (props: any) => {
+  const currentDate = new Date();
+  const hour = currentDate.getHours();
+  const isDaylight = hour > 8 || hour < 20;
+  const [currentView, setCurrentView] = useState(
+    E_Screens.SALT_WATER_FISHES_LIST
+  );
+  const value = { currentView, setCurrentView };
+  return (
+    <DaylightContext.Provider value={value}>
+      {props.children}
+    </DaylightContext.Provider>
+  );
+};
+
+export const useDaylightContext = () => React.useContext(DaylightContext);

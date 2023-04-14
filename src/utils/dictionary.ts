@@ -44,6 +44,10 @@ const languages: languagesInterface = {
     enName: "שם לועזי",
     hebName: "שם עיברי",
     nickName: "כינוי",
+    elementBeenUpload: "האלמנט החודש עלה לשרת",
+    elementDidnotUpload: "האלמנט לא עלה ",
+    elementBeenUpdate: "האלמנט עודכן בהצלחה",
+    elementUpdateFailed: "האלמנט לא עלה בהצלחה",
   },
   en: {
     addFish: "Add fish",

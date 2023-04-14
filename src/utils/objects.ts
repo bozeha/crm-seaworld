@@ -1,8 +1,20 @@
+import {
+  E_BeginnerCompatibleHe,
+  E_CareLevelHe,
+  E_NumberToATtankHe,
+  E_PredatorTankCompatibleHe,
+  E_PreferredTankLevelHe,
+  E_proneToDiseaseEn,
+  E_proneToDiseaseHe,
+  E_ReefCompatibleHe,
+} from "./enum";
+
 type SaltWaterFish = Record<
   string,
   {
     value: string;
     type: string;
+    options?: any;
   }
 >;
 
@@ -12,6 +24,22 @@ export const saltWaterFish: SaltWaterFish = {
   //     type: "text",
   //   },
   name: {
+    value: "",
+    type: "text",
+  },
+  family: {
+    value: "",
+    type: "text",
+  },
+  scientificName: {
+    value: "",
+    type: "text",
+  },
+  enName: {
+    value: "",
+    type: "text",
+  },
+  nickName: {
     value: "",
     type: "text",
   },
@@ -33,11 +61,13 @@ export const saltWaterFish: SaltWaterFish = {
   },
   proneToDisease: {
     value: "",
-    type: "text",
+    type: "select",
+    options: E_proneToDiseaseHe,
   },
   beginnerCompatible: {
     value: "",
-    type: "text",
+    type: "select",
+    options: E_BeginnerCompatibleHe,
   },
   adultSize: {
     value: "",
@@ -45,15 +75,18 @@ export const saltWaterFish: SaltWaterFish = {
   },
   reefCompatible: {
     value: "",
-    type: "text",
+    type: "select",
+    options: E_ReefCompatibleHe,
   },
   predatorTankCompatible: {
     value: "",
-    type: "text",
+    type: "select",
+    options: E_PredatorTankCompatibleHe,
   },
   careLevel: {
     value: "",
-    type: "text",
+    type: "select",
+    options: E_CareLevelHe,
   },
   pH: {
     value: "",
@@ -65,27 +98,13 @@ export const saltWaterFish: SaltWaterFish = {
   },
   preferredTankLevel: {
     value: "",
-    type: "text",
+    type: "select",
+    options: E_PreferredTankLevelHe,
   },
   numberToATtank: {
     value: "",
-    type: "text",
-  },
-  family: {
-    value: "",
-    type: "text",
-  },
-  scientificName: {
-    value: "",
-    type: "text",
-  },
-  enName: {
-    value: "",
-    type: "text",
-  },
-  nickName: {
-    value: "",
-    type: "text",
+    type: "select",
+    options: E_NumberToATtankHe,
   },
 };
 

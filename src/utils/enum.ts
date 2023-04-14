@@ -21,6 +21,7 @@ export enum E_Actions {
 }
 
 export const E_ReefCompatibleEn = {
+  0: "",
   1: "Yes",
   2: "Yes. Have been known to bother some small crustaceans though",
   3: "With caution",
@@ -31,6 +32,7 @@ export const E_ReefCompatibleEn = {
 };
 
 export const E_ReefCompatibleHe = {
+  0: "",
   1: "כן",
   2: "כן, אבל מציק לסרטנים קטנים",
   3: "כן, אבל בזהירות",
@@ -41,6 +43,7 @@ export const E_ReefCompatibleHe = {
 };
 
 export const E_CareLevelEn = {
+  0: "",
   1: "Very easy",
   2: "Easy",
   3: "Easy to moderate. ",
@@ -50,6 +53,7 @@ export const E_CareLevelEn = {
   7: "Some special requirements",
 };
 export const E_CareLevelHe = {
+  0: "",
   1: "קל מאוד",
   2: "קל",
   3: "קל עד בינוני",
@@ -60,6 +64,7 @@ export const E_CareLevelHe = {
 };
 
 export const E_BeginnerCompatibleEn = {
+  0: "",
   1: "Yes",
   2: "With Caution",
   3: "with caution, they need feeding several times each day.",
@@ -68,6 +73,7 @@ export const E_BeginnerCompatibleEn = {
   6: "No, they need an established tank with lots of tankmates.",
 };
 export const E_BeginnerCompatibleHe = {
+  0: "",
   1: "כן",
   2: "כן, בזהירות",
   3: "כן, בזהירות, דורשים האכלה מספר פעמים ביום",
@@ -77,6 +83,7 @@ export const E_BeginnerCompatibleHe = {
 };
 
 export const E_proneToDiseaseEn = {
+  0: "",
   1: "No, these are hardy fish",
   2: "No, these are hardy little fish",
   3: "No",
@@ -84,6 +91,7 @@ export const E_proneToDiseaseEn = {
   5: "Yes, Ich (Ick) & HLLE (Head & Lateral Line Erosion)",
 };
 export const E_proneToDiseaseHe = {
+  0: "",
   1: "לא, זה דג חזק",
   2: "לא, זה דג קטן וחזק",
   3: "לא",
@@ -92,6 +100,7 @@ export const E_proneToDiseaseHe = {
 };
 
 export const E_PreferredTankLevelEn = {
+  0: "",
   1: "All over",
   2: "Sandbed dweller",
   3: "Middle, close to rockscape.",
@@ -100,6 +109,7 @@ export const E_PreferredTankLevelEn = {
   6: "Close to live rock and substrate",
 };
 export const E_PreferredTankLevelHe = {
+  0: "",
   1: "בכל מקום",
   2: "שוכן על הקרקע",
   3: "אמצע האקוריום, קרוב לסלעים",
@@ -109,12 +119,14 @@ export const E_PreferredTankLevelHe = {
 };
 
 export const E_PredatorTankCompatibleEn = {
+  0: "",
   1: "Absolutely not",
   2: "No",
   3: "Once at a larger size",
   4: "Yes",
 };
 export const E_PredatorTankCompatibleHe = {
+  0: "",
   1: "ממש לא",
   2: "לא",
   3: "ברגע שהדג גדול",
@@ -122,6 +134,7 @@ export const E_PredatorTankCompatibleHe = {
 };
 
 export const E_NumberToATtankEn = {
+  0: "",
   1: "To be kept singularly. ",
   2: "Any suitable for your tanks bio-load",
   3: "Can be kept in mated pairs, hareems or alone. ",
@@ -144,6 +157,7 @@ export const E_NumberToATtankEn = {
   20: "To be kept singularly or in a pair, but with no other rabbitfish in the tank. ",
 };
 export const E_NumberToATtankHe = {
+  0: "",
   1: "להחזיק פריט אחד באקוריום",
   2: "כל כמות, אפשר להעמיס באקורייום",
   3: "להחזיק זוגות או בודדים",

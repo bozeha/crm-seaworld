@@ -28,8 +28,15 @@ import { isDisabled } from "@testing-library/user-event/dist/utils";
 // }
 
 const OneElement = ({ data }: any) => {
-  const { currentView, setCurrentView, oneElementId, setOneElementId } =
-    useContext(MainContext);
+  const {
+    currentView,
+    setCurrentView,
+    oneElementId,
+    setOneElementId,
+    setShowMessage,
+    setMessageText,
+    setShowLoader,
+  } = useContext(MainContext);
   const [itemObj, setItemObj] = useState<any>();
   useEffect(() => {
     if (data) {
@@ -52,15 +59,25 @@ const OneElement = ({ data }: any) => {
   };
 
   const onSubmit = async (e: any) => {
-    e.preventDefault();
-    const data = {
-      action: E_Actions.UPDATE_ELEMENT,
-      key: itemObj._id,
-      data: itemObj,
-      location: E_ListsTypes.SALT_WATER_FISHES_HE,
-    };
-    const resutls = await sendData(data);
-    console.log(`resutls::::::${JSON.stringify(resutls)}`);
+    try {
+      setShowLoader(true);
+      e.preventDefault();
+      const data = {
+        action: E_Actions.UPDATE_ELEMENT,
+        key: itemObj._id,
+        data: itemObj,
+        location: E_ListsTypes.SALT_WATER_FISHES_HE,
+      };
+      const resutls = await sendData(data);
+      setShowLoader(false);
+      setMessageText(getTrans("elementBeenUpdate"));
+      setShowMessage(true);
+      console.log(`resutls::::::${JSON.stringify(resutls)}`);
+    } catch (error) {
+      setShowLoader(false);
+      setMessageText(getTrans("elementUpdateFailed"));
+      console.log(`Error:::${error}`);
+    }
   };
 
   return (
@@ -68,7 +85,7 @@ const OneElement = ({ data }: any) => {
       {/* {data && Object.keys(data).map((current) => <form>{current}</form>)} */}
       {itemObj && <img src={itemObj.images && itemObj.images[0]} />}
       {itemObj &&
-        Object.keys(itemObj).map((currentElementKey) => {
+        Object.keys(saltWaterFish).map((currentElementKey) => {
           return (
             <div className="one-element">
               {Array.isArray(itemObj[currentElementKey]) === true ? (
@@ -96,15 +113,43 @@ const OneElement = ({ data }: any) => {
                 </div>
               ) : (
                 <div className="one-of-single">
-                  <input
-                    disabled={currentElementKey === "_id" ? true : false}
-                    value={itemObj[currentElementKey]}
-                    type="text"
-                    onChange={(e) => {
-                      changeValue(currentElementKey, e.target.value);
-                    }}
-                  />
-                  <label>{getTrans(currentElementKey)}</label>
+                  {saltWaterFish[currentElementKey].type === "select" ? (
+                    <>
+                      <select
+                        value={itemObj[currentElementKey]}
+                        onChange={(e) => {
+                          changeValue(
+                            currentElementKey,
+                            parseInt(e.target.value)
+                          );
+                        }}
+                        style={{ textAlign: "right" }}
+                      >
+                        {Object.keys(
+                          saltWaterFish[currentElementKey].options
+                        ).map((current: any) => (
+                          <option value={current}>
+                            {saltWaterFish[currentElementKey].options[current]}
+                          </option>
+                        ))}
+                      </select>
+                      <label style={{ textAlign: "right" }}>
+                        {getTrans(currentElementKey)}
+                      </label>
+                    </>
+                  ) : (
+                    <>
+                      <input
+                        disabled={currentElementKey === "_id" ? true : false}
+                        value={itemObj[currentElementKey]}
+                        type="text"
+                        onChange={(e) => {
+                          changeValue(currentElementKey, e.target.value);
+                        }}
+                      />
+                      <label>{getTrans(currentElementKey)}</label>
+                    </>
+                  )}
                 </div>
               )}
             </div>

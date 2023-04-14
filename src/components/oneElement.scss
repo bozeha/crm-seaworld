@@ -42,7 +42,8 @@
       display: flex;
       flex-direction: row;
       justify-content: space-between;
-      > input {
+      > input,
+      > select {
         font-size: 20px;
         margin-bottom: 10px;
         border: none;

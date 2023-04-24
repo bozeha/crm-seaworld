@@ -1,3 +1,10 @@
+export enum E_Elements {
+  SALT_WATER_FISHES = "saltWaterFishes",
+  FRESH_WATER_FISHES = "freshWaterFishes",
+  CORALS = "corals",
+  PLATNS = "platns",
+}
+
 export enum E_ListsTypes {
   SALT_WATER_FISHES = "saltWaterFishes",
   USERS = "users",
@@ -18,6 +25,7 @@ export enum E_Screens {
 export enum E_Actions {
   ADD_ELEMENT = "addElements",
   UPDATE_ELEMENT = "updateElements",
+  UPLOAD_IMAGE = "uploadImages",
 }
 
 export const E_ReefCompatibleEn = {

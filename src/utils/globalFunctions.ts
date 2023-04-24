@@ -12,7 +12,12 @@ export const getData = async (collection: any) => {
     const results = await fetch(`${getVal("serverApi")}/items`, {
       method: "POST",
       body: JSON.stringify(sendData),
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": "true",
+        "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE",
+      },
     }).then((res) => {
       return res.json();
     });
@@ -29,7 +34,25 @@ export const sendData = async (data: any) => {
     await fetch(`${getVal("serverApi")}${path}`, {
       method: "POST",
       body: JSON.stringify(data),
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+    }).then((results) => {
+      console.log(`results::::::${JSON.stringify(results)}`);
+      return results;
+    });
+  } catch (error) {
+    console.log(`Error:::${error}`);
+    return error;
+  }
+};
+export const sendFormData = async (data: any) => {
+  try {
+    const path = getVal(data.get("action"));
+    await fetch(`${getVal("serverApi")}${path}`, {
+      method: "POST",
+      body: data,
     }).then((results) => {
       console.log(`results::::::${JSON.stringify(results)}`);
       return results;

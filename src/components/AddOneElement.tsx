@@ -4,14 +4,15 @@ import { useEffect, useState } from "react";
 import uuid from "react-uuid";
 import { getVal } from "../utils/config";
 import getTrans from "../utils/dictionary";
-import { E_Actions, E_ListsTypes } from "../utils/enum";
-import { sendData } from "../utils/globalFunctions";
+import { E_Actions, E_Elements, E_ListsTypes } from "../utils/enum";
+import { sendData, sendFormData } from "../utils/globalFunctions";
 import { saltWaterFish } from "../utils/objects";
 import { useContext } from "react";
 import { MainContext } from "../App";
 
 const AddOneElement = () => {
   const [itemObj, setItemObj] = useState<any>();
+  const [elementImage, setElementImage] = useState<any>();
   const { setShowLoader, setShowMessage, setMessageText } =
     useContext(MainContext);
   const onSubmit = async (e: any) => {
@@ -25,6 +26,20 @@ const AddOneElement = () => {
       };
       const results = await sendData(objToSend);
       console.log(`results::::::${JSON.stringify(results)}`);
+      if (elementImage) {
+        const key = itemObj.enName.replaceAll(" ", "");
+
+        let formData = new FormData();
+        formData.append("key", key);
+        formData.append("type", E_Elements.SALT_WATER_FISHES);
+        formData.append("action", E_Actions.UPLOAD_IMAGE);
+        formData.append(`files`, elementImage);
+
+        const imageResults = await sendFormData(formData);
+
+        console.log(`imageResults::::::${JSON.stringify(imageResults)}`);
+      }
+
       setMessageText(getTrans("elementBeenUpload"));
       setShowMessage(true);
     } catch (error) {
@@ -54,7 +69,12 @@ const AddOneElement = () => {
   return (
     <form
       onSubmit={(e) => onSubmit(e)}
-      style={{ display: "flex", flexDirection: "column" }}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        marginTop: "100px",
+        marginBottom: "100px",
+      }}
     >
       {itemObj &&
         Object.keys(saltWaterFish).map((currentKey: string) => (
@@ -63,6 +83,7 @@ const AddOneElement = () => {
               display: "flex",
               flexDirection: "row",
               justifyContent: "center",
+              paddingBottom: "20px",
             }}
           >
             {saltWaterFish[currentKey].type === "text" && (
@@ -75,7 +96,14 @@ const AddOneElement = () => {
                     changeValue(currentKey, e.target.value);
                   }}
                 />
-                <label style={{ width: "250px", textAlign: "right" }}>
+                <label
+                  style={{
+                    width: "250px",
+                    textAlign: "right",
+                    backgroundColor: "lightblue",
+                    fontSize: "25px ",
+                  }}
+                >
                   {getTrans(currentKey)}
                 </label>
               </>
@@ -87,7 +115,7 @@ const AddOneElement = () => {
                   onChange={(e) => {
                     changeValue(currentKey, e.target.value);
                   }}
-                  style={{ textAlign: "right", width: 400 }}
+                  style={{ textAlign: "right", width: 400, fontSize: "25px" }}
                 >
                   {Object.keys(saltWaterFish[currentKey].options).map(
                     (current: any) => (
@@ -98,22 +126,42 @@ const AddOneElement = () => {
                   )}
                 </select>
 
-                {/* <input
-                  style={{ textAlign: "right", width: "400px" }}
-                  type={`${saltWaterFish[currentKey].type || "text"}`}
-                  value={itemObj[currentKey]}
-                  onChange={(e) => {
-                    changeValue(currentKey, e.target.value);
+                <label
+                  style={{
+                    width: "250px",
+                    textAlign: "right",
+                    fontSize: "25px",
                   }}
-                /> */}
-                <label style={{ width: "250px", textAlign: "right" }}>
+                >
                   {getTrans(currentKey)}
                 </label>
               </>
             )}
           </div>
         ))}
-      <input type="submit" />
+
+      <div
+        style={{
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <input
+          style={{ width: "200px", marginBottom: "15px" }}
+          type="file"
+          onChange={(e) => {
+            if (e.target.files) {
+              setElementImage(e.target.files[0]);
+              changeValue("images", [e.target.files[0]?.name]);
+              console.log(`elementImage::::::${JSON.stringify(elementImage)}`);
+            }
+          }}
+        />
+        <input style={{ width: "200px" }} type="submit" />
+      </div>
     </form>
   );
 };

@@ -23,9 +23,22 @@ import MailIcon from "@mui/icons-material/Mail";
 import { MainContext } from "../App";
 import { useContext } from "react";
 import { E_Screens } from "../utils/enum";
+import AddIcon from "@mui/icons-material/Add";
+import GridViewIcon from "@mui/icons-material/GridView";
+import WifiProtectedSetupIcon from "@mui/icons-material/WifiProtectedSetup";
 
 const drawerWidth = 240;
 
+const getIcon = (screen: E_Screens) => {
+  switch (screen) {
+    case E_Screens.ADD_SALT_WATER_FISH:
+      return <AddIcon />;
+    case E_Screens.SALT_WATER_FISHES_LIST:
+      return <GridViewIcon />;
+    case E_Screens.SALT_WATER_FISH_CARD:
+      return <WifiProtectedSetupIcon />;
+  }
+};
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
   transition: theme.transitions.create("width", {
@@ -166,7 +179,9 @@ const SideDashboard = () => {
                     justifyContent: "center",
                   }}
                 >
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                  {getIcon(text)}
+
+                  {/* {index % 2 === 0 ? <InboxIcon /> : <MailIcon />} */}
                 </ListItemIcon>
                 <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>

@@ -7,23 +7,23 @@ import ListOfElements from "./ListOfElements";
 import { MainContext } from "../App";
 import OneElement from "./OneElement";
 import AddOneElement from "./AddOneElement";
+import ListOfUsers from "./ListOfUsers";
+import AddGuid from "./AddGuid";
 
 //import { useDaylightContext } from "../MainContext";
 
-const MainBlock = () => {
-  const [data, setData] = useState<any>(null);
+const MainBlock = (props: any) => {
+  useEffect(() => {
+    console.log(`build MainBlock`);
+  }, []);
+  const { updateList, data } = props;
   const [selectedElement, setSelectedElement] = useState({});
   //const { currentView } = useDaylightContext();
   const { currentView, setCurrentView, oneElementId, setOneElementId } =
     useContext(MainContext);
-  const updateList = async () => {
-    const results = await getData(E_ListsTypes.SALT_WATER_FISHES_HE);
-    console.log(`results::::::${JSON.stringify(results)}`);
-    setData(results);
-  };
 
   useEffect(() => {
-    updateList();
+    updateList(E_ListsTypes.SALT_WATER_FISHES_HE);
     console.log(`currentView:: ${currentView}`);
     console.log(`oneElementId:: ${oneElementId}`);
     //console.log(`daylight:: ${value.currentView}`);
@@ -38,17 +38,24 @@ const MainBlock = () => {
   }, [oneElementId]);
 
   //return <div>{data && console.log(JSON.stringify(data))}</div>;
-
+  useEffect(() => {
+    console.log(`Main block update data !!`);
+  }, [data]);
   return (
     <>
       {/* {JSON.stringify(data)} */}
-      {currentView === E_Screens.SALT_WATER_FISHES_LIST && (
+      {(currentView === E_Screens.SALT_WATER_FISHES_LIST ||
+        currentView === E_Screens.SALT_WATER_CORALS_LIST) && (
         <ListOfElements data={data} />
       )}
       {currentView === E_Screens.SALT_WATER_FISH_CARD && (
         <OneElement data={selectedElement} key={oneElementId} />
       )}
       {currentView === E_Screens.ADD_SALT_WATER_FISH && <AddOneElement />}
+      {currentView === E_Screens.USERS && (
+        <ListOfUsers data={data} updateList={updateList} />
+      )}
+      {currentView === E_Screens.ADD_GUID && <AddGuid />}
     </>
   );
 };

@@ -48,6 +48,7 @@ const languages: languagesInterface = {
     elementDidnotUpload: "האלמנט לא עלה ",
     elementBeenUpdate: "האלמנט עודכן בהצלחה",
     elementUpdateFailed: "האלמנט לא עלה בהצלחה",
+    addGuid:"הוסף מדריך"
   },
   en: {
     addFish: "Add fish",

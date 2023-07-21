@@ -1,5 +1,5 @@
 //import * as React from "react";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import ImageListItemBar from "@mui/material/ImageListItemBar";
@@ -25,6 +25,9 @@ const ListOfElements = ({ data }: any) => {
       headers: { "Content-Type": "application/json" },
     });
   };
+  useEffect(() => {
+    console.log(`data updated !!!!!!!!!!!!!!!!!`);
+  }, [data]);
   return (
     <>
       <label>remove</label>
@@ -64,18 +67,20 @@ const ListOfElements = ({ data }: any) => {
                     x
                   </div>
                 )}
+                {current?.images && (
+                  <img
+                    src={`${current?.images[0]}`}
+                    srcSet={`${current?.images[0]}`}
+                    alt={current?.title}
+                    loading="lazy"
+                    onClick={() => {
+                      //console.log(`key:: ${currentkey}`);
+                      setOneElementId(current._id);
+                      setCurrentView(E_Screens.SALT_WATER_FISH_CARD);
+                    }}
+                  />
+                )}
 
-                <img
-                  src={`${current.images[0]}`}
-                  srcSet={`${current.images[0]}`}
-                  alt={current.title}
-                  loading="lazy"
-                  onClick={() => {
-                    //console.log(`key:: ${currentkey}`);
-                    setOneElementId(current._id);
-                    setCurrentView(E_Screens.SALT_WATER_FISH_CARD);
-                  }}
-                />
                 <ImageListItemBar
                   title={current.name}
                   subtitle={current.author}

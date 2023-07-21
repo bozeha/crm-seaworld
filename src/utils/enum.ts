@@ -13,13 +13,24 @@ export enum E_ListsTypes {
   WATER_INDEX = "waterIndex",
   SALT_WATER_FISHES_HE = "saltWaterFishesHe",
   SALT_WATER_FISHES_EN = "saltWaterFishesEn",
+  FRESH_WATER_FISHES_HE = "freshWaterFishesHe",
+  FRESH_WATER_FISHES_EN = "freshWaterFishesEn",
+  CORALS_HE = "coralsHe",
+  CORALS_EN = "coralsEn",
+  PLANTS_HE = "plantsHe",
+  PLANTS_EN = "plantsEn",
+
+
 }
 
 export enum E_Screens {
+  USERS = "users",
+  SALT_WATER_CORALS_LIST = "saltWaterCoralsList",
   SALT_WATER_FISHES_LIST = "saltWaterFishesList",
   FRESH_WATER_FISHES_LIST = "freshWaterFishesList",
   SALT_WATER_FISH_CARD = "saltWaterFishCard",
   ADD_SALT_WATER_FISH = "addSaltWaterFish",
+  ADD_GUID = "addGuid",
 }
 
 export enum E_Actions {

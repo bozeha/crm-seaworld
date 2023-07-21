@@ -20,10 +20,14 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
+import AgricultureIcon from "@mui/icons-material/Agriculture";
 import { MainContext } from "../App";
 import { useContext } from "react";
 import { E_Screens } from "../utils/enum";
 import AddIcon from "@mui/icons-material/Add";
+import PostAddIcon from "@mui/icons-material/PostAdd";
+import AddBusinessIcon from "@mui/icons-material/AddBusiness";
+import PeopleIcon from "@mui/icons-material/People";
 import GridViewIcon from "@mui/icons-material/GridView";
 import WifiProtectedSetupIcon from "@mui/icons-material/WifiProtectedSetup";
 
@@ -31,12 +35,18 @@ const drawerWidth = 240;
 
 const getIcon = (screen: E_Screens) => {
   switch (screen) {
+    case E_Screens.USERS:
+      return <PeopleIcon />;
+    case E_Screens.SALT_WATER_CORALS_LIST:
+      return <AddBusinessIcon />;
     case E_Screens.ADD_SALT_WATER_FISH:
       return <AddIcon />;
     case E_Screens.SALT_WATER_FISHES_LIST:
       return <GridViewIcon />;
     case E_Screens.SALT_WATER_FISH_CARD:
       return <WifiProtectedSetupIcon />;
+    case E_Screens.ADD_GUID:
+      return <PostAddIcon />;
   }
 };
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -109,8 +119,13 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 const SideDashboard = () => {
-  const { currentView, setCurrentView, oneElementId, setOneElementId } =
-    useContext(MainContext);
+  const {
+    currentView,
+    setCurrentView,
+    oneElementId,
+    setOneElementId,
+    setData,
+  } = useContext(MainContext);
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
@@ -157,9 +172,12 @@ const SideDashboard = () => {
         <Divider />
         <List>
           {[
+            E_Screens.USERS,
+            E_Screens.SALT_WATER_CORALS_LIST,
             E_Screens.SALT_WATER_FISHES_LIST,
             E_Screens.SALT_WATER_FISH_CARD,
             E_Screens.ADD_SALT_WATER_FISH,
+            E_Screens.ADD_GUID,
           ].map((text, index) => (
             <ListItem key={text} disablePadding sx={{ display: "block" }}>
               <ListItemButton
@@ -169,6 +187,7 @@ const SideDashboard = () => {
                   px: 2.5,
                 }}
                 onClick={() => {
+                  setData([]);
                   setCurrentView(text);
                 }}
               >

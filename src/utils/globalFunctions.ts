@@ -33,7 +33,7 @@ export const sendData = async (data: any) => {
     console.log(`data::::::${JSON.stringify(data)}`);
     await fetch(`${getVal("serverApi")}${path}`, {
       method: "POST",
-      body: JSON.stringify(data),
+      body: data,
       headers: {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
@@ -47,6 +47,28 @@ export const sendData = async (data: any) => {
     return error;
   }
 };
+export const sendData2 = async (data: any) => {
+  try {
+    const path = getVal(data.action);
+    console.log(`data::::::${JSON.stringify(data)}`);
+    await fetch(`${getVal("serverApi")}${path}`, {
+      method: "POST",
+      body: data.data,
+      // headers: {
+      //   "Content-Type": "application/json",
+      //   "Access-Control-Allow-Origin": "*",
+      // },
+    }).then((results) => {
+      console.log(`results::::::${JSON.stringify(results)}`);
+      return results;
+    });
+  } catch (error) {
+    console.log(`Error:::${error}`);
+    return error;
+  }
+};
+
+
 export const sendFormData = async (data: any) => {
   try {
     const path = getVal(data.get("action"));

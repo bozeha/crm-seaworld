@@ -1,21 +1,38 @@
 import { getTrans } from "../utils/dictionary";
 import { useState } from "react";
+import { E_Actions, E_ListsTypes } from "../utils/enum";
+import { getVal } from "../utils/config";
+import { sendData, sendData2 } from "../utils/globalFunctions";
+import uuid from "react-uuid";
+import Loader from "./Loader";
+import axios from "axios";
 
 interface ElementType {}
 interface NewElement {
   type: string;
   id: string;
   value: string;
+  data?: any;
 }
 
 const AddGuid = () => {
+  const [files, setFiles] = useState<any[]>([]);
+  const [firstName, setFirstName] = useState("");
+
   const [counter, updateCounter] = useState(0);
+  const [showLoader, setShowLoader] = useState(false);
+  const [test, setTest] = useState<File | null>(null);
   const [obj, setObj] = useState<{
-    [key: string]: { type: string; id: string; value: string };
+    [key: string]: { type: string; id: string; value: string; data?: any };
   }>({
     title: {
       type: "h1",
       id: "title",
+      value: "",
+    },
+    englishTitle: {
+      type: "h1",
+      id: "englishTitle",
       value: "",
     },
     subTitle: {
@@ -23,7 +40,87 @@ const AddGuid = () => {
       id: "subTitle",
       value: "",
     },
+    mainImage: {
+      type: "image",
+      id: "mainImage",
+      value: "",
+      data: "",
+    },
   });
+
+  const onSubmit2 = async (e: any) => {
+    e.preventDefault();
+
+    var formData = new FormData();
+
+    formData.append("obj", JSON.stringify(obj));
+    files.map((current) => {
+      formData.append("myFiles", current);
+    });
+
+    const response = await fetch(`${getVal("serverApi")}/guides/upload`, {
+      method: "POST",
+      body: formData,
+    });
+  };
+  const onSubmit = async (e: any) => {
+    console.log(`sssssssssssssssss`);
+    setShowLoader(true);
+    console.log(`E_Actions.UPLOAD_GUIDE:::: ${E_Actions.UPLOAD_GUIDE}`);
+    try {
+      const formData = new FormData();
+
+      //formData.append("mainImage", obj["mainImage"].data);
+      //formData.append("userpic", obj["mainImage"].data, "chris1.jpg");
+      if (!test) return;
+      formData.append("userpic", test, test?.name);
+      //formData.append("englishTitle", obj["englishTitle"].value);
+
+      e.preventDefault();
+      const objToSend = {
+        data: formData,
+        collection: E_ListsTypes.GUIDES_HE,
+        lang: getVal("lang"),
+        action: E_Actions.UPLOAD_GUIDE,
+      };
+
+      //const results = await sendData2(objToSend);
+      const path = getVal(E_Actions.UPLOAD_GUIDE);
+      const results = await fetch(`${getVal("serverApi")}${path}`, {
+        method: "POST",
+        body: formData,
+        // headers: {
+        //   "Content-Type": "application/json",
+        //   "Access-Control-Allow-Origin": "*",
+        // },
+      }).then((results) => {
+        console.log(`results::::::${JSON.stringify(results)}`);
+        return results;
+      });
+      //const results = await sendData(objToSend);
+      setShowLoader(false);
+      console.log(`results::::::${JSON.stringify(results)}`);
+      //   if (elementImage) {
+      //     const key = itemObj.enName.replaceAll(" ", "");
+
+      //     let formData = new FormData();
+      //     formData.append("key", key);
+      //     formData.append("type", E_Elements.SALT_WATER_FISHES);
+      //     formData.append("action", E_Actions.UPLOAD_IMAGE);
+      //     formData.append(`files`, elementImage);
+
+      //     const imageResults = await sendFormData(formData);
+
+      //     console.log(`imageResults::::::${JSON.stringify(imageResults)}`);
+      //   }
+
+      // setMessageText(getTrans("elementBeenUpload"));
+      // setShowMessage(true);
+    } catch (error) {
+      setShowLoader(false);
+      console.log(`Error:::${error}`);
+    }
+  };
   const removeElement = (id: string) => {
     const tempObj = { ...obj };
     if (tempObj.hasOwnProperty(id)) {
@@ -75,6 +172,7 @@ const AddGuid = () => {
           type: "image",
           id: `image-${counter}`,
           value: "",
+          data: null,
         };
         addValue(newObj, newObj.id);
         return;
@@ -92,11 +190,24 @@ const AddGuid = () => {
     const mergedObj = { ...obj, [key]: newObj };
     setObj(mergedObj);
   };
-  const updateObj = (newVal: any) => {
+
+  const reader = new FileReader();
+  reader.onload = async () => {
+    if (typeof reader?.result === "string") {
+      const base64String = reader?.result?.split(",")[1];
+      return base64String;
+    }
+  };
+  const setFilesFunction = (e: any) => {
+    updateObj(e);
+    setFiles([...files, ...e?.target?.files]);
+  };
+  const updateObj = async (newVal: any) => {
     const mergedObj = { ...obj };
     if (newVal?.target?.files && newVal?.target?.files.length > 0) {
       const imgUrl = URL.createObjectURL(newVal?.target?.files[0]);
       mergedObj[newVal.target.name].value = imgUrl;
+      setTest(newVal?.target?.files[0]);
     } else {
       mergedObj[newVal.target.name].value = newVal.target.value;
     }
@@ -108,8 +219,11 @@ const AddGuid = () => {
   };
   return (
     <div style={{ paddingBottom: "500px", position: "relative" }}>
+      {showLoader && <Loader />}
       <h1>{getTrans("addGuid")}</h1>
       <form
+        onSubmit={onSubmit2}
+        ///onSubmit={onSubmit}
         style={{
           display: "flex",
           flexDirection: "column",
@@ -117,11 +231,12 @@ const AddGuid = () => {
           alignItems: "center",
         }}
       >
-        {Object.keys(obj).map((current: string) => {
+        {Object.keys(obj).map((current: string, index) => {
           let currentElement = null;
 
           currentElement = (
             <div
+              key={index}
               className="element"
               style={{ border: "1px solid lightblue", marginBottom: "10px" }}
             >
@@ -144,14 +259,30 @@ const AddGuid = () => {
                   }}
                 />
               ) : (
-                <input
-                  style={{ width: "500px" }}
-                  name={obj[current].id}
-                  type={obj[current].type === "image" ? "file" : "text"}
-                  onChange={(val) => {
-                    updateObj(val);
-                  }}
-                />
+                <>
+                  {obj[current].type === "image" ? (
+                    <input
+                      multiple
+                      onChange={(e) => {
+                        if (e?.target?.files && e?.target?.files.length > 0) {
+                          setFilesFunction(e);
+                        }
+                      }}
+                      type="file"
+                      name={obj[current].id}
+                    />
+                  ) : (
+                    <input
+                      style={{ width: "500px" }}
+                      name={obj[current].id}
+                      type="text"
+                      //type={obj[current].type === "image" ? "file" : "text"}
+                      onChange={(val) => {
+                        updateObj(val);
+                      }}
+                    />
+                  )}
+                </>
               )}
               {obj[current].type === "image" && (
                 <img
@@ -166,6 +297,11 @@ const AddGuid = () => {
 
           return <>{currentElement}</>;
         })}
+        <input
+          style={{ width: "300px", backgroundColor: "lightblue" }}
+          type="submit"
+          title="submit"
+        />
       </form>
       <div
         style={{

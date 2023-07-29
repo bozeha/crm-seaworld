@@ -16,6 +16,7 @@
     "@types/node": "^16.18.23",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
+    "axios": "^1.4.0",
     "draft-js": "^0.11.7",
     "material-ui": "^0.20.2",
     "react": "^18.2.0",

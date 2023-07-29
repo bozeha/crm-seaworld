@@ -19,6 +19,8 @@ export enum E_ListsTypes {
   CORALS_EN = "coralsEn",
   PLANTS_HE = "plantsHe",
   PLANTS_EN = "plantsEn",
+  GUIDES_EN ="guidesEn", 
+  GUIDES_HE ="guidesHe", 
 
 
 }
@@ -37,6 +39,8 @@ export enum E_Actions {
   ADD_ELEMENT = "addElements",
   UPDATE_ELEMENT = "updateElements",
   UPLOAD_IMAGE = "uploadImages",
+  UPLOAD_GUIDE = "uploadGuide",
+
 }
 
 export const E_ReefCompatibleEn = {

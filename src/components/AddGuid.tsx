@@ -1,13 +1,10 @@
 import { getTrans } from "../utils/dictionary";
 import { useState } from "react";
-import { E_Actions, E_ListsTypes } from "../utils/enum";
+import { E_Actions, E_Folders, E_ListsTypes } from "../utils/enum";
 import { getVal } from "../utils/config";
-import { sendData, sendData2 } from "../utils/globalFunctions";
-import uuid from "react-uuid";
 import Loader from "./Loader";
-import axios from "axios";
+import "./addGuid.scss";
 
-interface ElementType {}
 interface NewElement {
   type: string;
   id: string;
@@ -16,14 +13,20 @@ interface NewElement {
 }
 
 const AddGuid = () => {
-  const [files, setFiles] = useState<any[]>([]);
-  const [firstName, setFirstName] = useState("");
+  const [files, setFiles] = useState<any>({});
 
   const [counter, updateCounter] = useState(0);
+
   const [showLoader, setShowLoader] = useState(false);
   const [test, setTest] = useState<File | null>(null);
   const [obj, setObj] = useState<{
-    [key: string]: { type: string; id: string; value: string; data?: any };
+    [key: string]: {
+      type: string;
+      id: string;
+      value: string;
+      data?: any;
+      required?: boolean;
+    };
   }>({
     title: {
       type: "h1",
@@ -34,6 +37,7 @@ const AddGuid = () => {
       type: "h1",
       id: "englishTitle",
       value: "",
+      required: true,
     },
     subTitle: {
       type: "h4",
@@ -51,78 +55,43 @@ const AddGuid = () => {
   const onSubmit2 = async (e: any) => {
     e.preventDefault();
 
+    const objToSend = {
+      collection: E_ListsTypes.GUIDES_HE,
+      lang: getVal("lang"),
+      action: E_Actions.UPLOAD_GUIDE,
+      category: E_Folders.GUIDES,
+    };
     var formData = new FormData();
-
+    //addValue(E_Folders.GUIDES, "category");
+    console.log(
+      `obj:::xxx:::${JSON.stringify(JSON.stringify(obj))}::xx:obj-END`
+    );
     formData.append("obj", JSON.stringify(obj));
-    files.map((current) => {
+    formData.append("settingsObj", JSON.stringify(objToSend));
+    console.log(`files::::::${JSON.stringify(files)}:::files-END`);
+    let arrayOfFiles: any[] = [];
+    Object.keys(files).map((current, keys) => {
+      arrayOfFiles = [...files[current], ...arrayOfFiles];
+    });
+    arrayOfFiles.map((current: any) => {
       formData.append("myFiles", current);
     });
 
-    const response = await fetch(`${getVal("serverApi")}/guides/upload`, {
+    const response = await fetch(`${getVal("serverApi")}/uploadData`, {
       method: "POST",
       body: formData,
     });
   };
-  const onSubmit = async (e: any) => {
-    console.log(`sssssssssssssssss`);
-    setShowLoader(true);
-    console.log(`E_Actions.UPLOAD_GUIDE:::: ${E_Actions.UPLOAD_GUIDE}`);
-    try {
-      const formData = new FormData();
 
-      //formData.append("mainImage", obj["mainImage"].data);
-      //formData.append("userpic", obj["mainImage"].data, "chris1.jpg");
-      if (!test) return;
-      formData.append("userpic", test, test?.name);
-      //formData.append("englishTitle", obj["englishTitle"].value);
-
-      e.preventDefault();
-      const objToSend = {
-        data: formData,
-        collection: E_ListsTypes.GUIDES_HE,
-        lang: getVal("lang"),
-        action: E_Actions.UPLOAD_GUIDE,
-      };
-
-      //const results = await sendData2(objToSend);
-      const path = getVal(E_Actions.UPLOAD_GUIDE);
-      const results = await fetch(`${getVal("serverApi")}${path}`, {
-        method: "POST",
-        body: formData,
-        // headers: {
-        //   "Content-Type": "application/json",
-        //   "Access-Control-Allow-Origin": "*",
-        // },
-      }).then((results) => {
-        console.log(`results::::::${JSON.stringify(results)}`);
-        return results;
-      });
-      //const results = await sendData(objToSend);
-      setShowLoader(false);
-      console.log(`results::::::${JSON.stringify(results)}`);
-      //   if (elementImage) {
-      //     const key = itemObj.enName.replaceAll(" ", "");
-
-      //     let formData = new FormData();
-      //     formData.append("key", key);
-      //     formData.append("type", E_Elements.SALT_WATER_FISHES);
-      //     formData.append("action", E_Actions.UPLOAD_IMAGE);
-      //     formData.append(`files`, elementImage);
-
-      //     const imageResults = await sendFormData(formData);
-
-      //     console.log(`imageResults::::::${JSON.stringify(imageResults)}`);
-      //   }
-
-      // setMessageText(getTrans("elementBeenUpload"));
-      // setShowMessage(true);
-    } catch (error) {
-      setShowLoader(false);
-      console.log(`Error:::${error}`);
-    }
-  };
   const removeElement = (id: string) => {
     const tempObj = { ...obj };
+
+    if (id.includes("image") || id.includes("Image")) {
+      const tempFilesObj = { ...files };
+      delete tempFilesObj[id];
+      setFiles(tempFilesObj);
+    }
+
     if (tempObj.hasOwnProperty(id)) {
       delete tempObj[id];
       setObj(tempObj);
@@ -198,9 +167,10 @@ const AddGuid = () => {
       return base64String;
     }
   };
-  const setFilesFunction = (e: any) => {
+  const setFilesFunction = async (e: any) => {
     updateObj(e);
-    setFiles([...files, ...e?.target?.files]);
+    const newFileObj = { [e?.target?.name]: e?.target?.files };
+    setFiles({ ...files, ...newFileObj });
   };
   const updateObj = async (newVal: any) => {
     const mergedObj = { ...obj };
@@ -212,10 +182,6 @@ const AddGuid = () => {
       mergedObj[newVal.target.name].value = newVal.target.value;
     }
     setObj(mergedObj);
-    console.log(`mergedObj::::::${JSON.stringify(mergedObj)}:::mergedObj-END`);
-    console.log(
-      `${newVal.target.name}newVal.target.value:::: ${newVal.target.value}`
-    );
   };
   return (
     <div style={{ paddingBottom: "500px", position: "relative" }}>
@@ -223,7 +189,6 @@ const AddGuid = () => {
       <h1>{getTrans("addGuid")}</h1>
       <form
         onSubmit={onSubmit2}
-        ///onSubmit={onSubmit}
         style={{
           display: "flex",
           flexDirection: "column",
@@ -272,15 +237,26 @@ const AddGuid = () => {
                       name={obj[current].id}
                     />
                   ) : (
-                    <input
-                      style={{ width: "500px" }}
-                      name={obj[current].id}
-                      type="text"
-                      //type={obj[current].type === "image" ? "file" : "text"}
-                      onChange={(val) => {
-                        updateObj(val);
-                      }}
-                    />
+                    <>
+                      {obj[current]?.required ? (
+                        <input
+                          style={{ width: "500px" }}
+                          name={obj[current].id}
+                          required
+                          onChange={(val) => {
+                            updateObj(val);
+                          }}
+                        />
+                      ) : (
+                        <input
+                          style={{ width: "500px" }}
+                          name={obj[current].id}
+                          onChange={(val) => {
+                            updateObj(val);
+                          }}
+                        />
+                      )}
+                    </>
                   )}
                 </>
               )}
@@ -297,11 +273,7 @@ const AddGuid = () => {
 
           return <>{currentElement}</>;
         })}
-        <input
-          style={{ width: "300px", backgroundColor: "lightblue" }}
-          type="submit"
-          title="submit"
-        />
+        <input id="submit-button" type="submit" title="submit" />
       </form>
       <div
         style={{

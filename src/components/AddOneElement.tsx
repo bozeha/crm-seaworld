@@ -15,6 +15,7 @@ const AddOneElement = () => {
   const [elementImage, setElementImage] = useState<any>();
   const { setShowLoader, setShowMessage, setMessageText } =
     useContext(MainContext);
+  console.log(`xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`);
   const onSubmit = async (e: any) => {
     try {
       e.preventDefault();

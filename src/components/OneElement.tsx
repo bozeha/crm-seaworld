@@ -1,6 +1,6 @@
 import { MainContext } from "../App";
 import { useContext, useState, useEffect } from "react";
-import { sendData } from "../utils/globalFunctions";
+import { getItemImage, sendData } from "../utils/globalFunctions";
 import { E_Actions, E_ListsTypes } from "../utils/enum";
 import { getVal } from "../utils/config";
 import getTrans from "../utils/dictionary";
@@ -83,11 +83,19 @@ const OneElement = ({ data }: any) => {
   return (
     <form className="one-element-form" onSubmit={onSubmit}>
       {/* {data && Object.keys(data).map((current) => <form>{current}</form>)} */}
-      {itemObj && <img src={itemObj.images && itemObj.images[0]} />}
+      {itemObj && (
+        <img src={itemObj.images && getItemImage(itemObj.images[0])} />
+      )}
       {itemObj &&
         Object.keys(saltWaterFish).map((currentElementKey) => {
           return (
             <div className="one-element">
+              <p>{`${itemObj.enName
+                .replaceAll(" ", "")
+                .replaceAll("&nbsp;", "")}`}</p>
+              <>{`images/saltWaterFishes/${itemObj.enName
+                .replaceAll(" ", "")
+                .replaceAll("&nbsp;", "")}/image.jpg`}</>
               {Array.isArray(itemObj[currentElementKey]) === true ? (
                 <div className="one-of-array">
                   {itemObj[currentElementKey].map(

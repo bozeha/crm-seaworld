@@ -10,5 +10,6 @@ const defaultObj: any = {
 };
 
 export const getVal = (val: string) => {
+  console.log(`defaultObj[val]:::: ${defaultObj[val]}`);
   return defaultObj[val];
 };

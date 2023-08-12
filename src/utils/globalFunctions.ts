@@ -33,10 +33,12 @@ export const sendData = async (data: any) => {
     console.log(`data::::::${JSON.stringify(data)}`);
     await fetch(`${getVal("serverApi")}${path}`, {
       method: "POST",
-      body: data,
+      body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
+        // "Access-Control-Allow-Methods": " POST, GET, PUT, DELETE, OPTIONS",
+        // "Access-Control-Allow-Headers": "Content-Type",
       },
     }).then((results) => {
       console.log(`results::::::${JSON.stringify(results)}`);
@@ -68,7 +70,6 @@ export const sendData2 = async (data: any) => {
   }
 };
 
-
 export const sendFormData = async (data: any) => {
   try {
     const path = getVal(data.get("action"));
@@ -83,4 +84,7 @@ export const sendFormData = async (data: any) => {
     console.log(`Error:::${error}`);
     return error;
   }
+};
+export const getItemImage = (src: string) => {
+  return src.includes("http") ? src : `${getVal("serverApi")}/${src}`;
 };

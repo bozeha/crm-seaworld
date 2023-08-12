@@ -1,3 +1,7 @@
+export enum E_Folders {
+  GUIDES = "./guides",
+}
+
 export enum E_Elements {
   SALT_WATER_FISHES = "saltWaterFishes",
   FRESH_WATER_FISHES = "freshWaterFishes",
@@ -19,10 +23,8 @@ export enum E_ListsTypes {
   CORALS_EN = "coralsEn",
   PLANTS_HE = "plantsHe",
   PLANTS_EN = "plantsEn",
-  GUIDES_EN ="guidesEn", 
-  GUIDES_HE ="guidesHe", 
-
-
+  GUIDES_EN = "guidesEn",
+  GUIDES_HE = "guidesHe",
 }
 
 export enum E_Screens {
@@ -40,7 +42,6 @@ export enum E_Actions {
   UPDATE_ELEMENT = "updateElements",
   UPLOAD_IMAGE = "uploadImages",
   UPLOAD_GUIDE = "uploadGuide",
-
 }
 
 export const E_ReefCompatibleEn = {

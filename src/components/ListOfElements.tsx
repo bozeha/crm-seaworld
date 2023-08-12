@@ -9,6 +9,7 @@ import InfoIcon from "@mui/icons-material/Info";
 import { MainContext } from "../App";
 import { E_Screens, E_ListsTypes } from "../utils/enum";
 import { getVal } from "../utils/config";
+import { getItemImage } from "../utils/globalFunctions";
 const ListOfElements = ({ data }: any) => {
   const [showRemoveButtons, setShowRemoveButtons] = useState(false);
   const { currentView, setCurrentView, oneElementId, setOneElementId } =
@@ -67,18 +68,24 @@ const ListOfElements = ({ data }: any) => {
                     x
                   </div>
                 )}
-                {current?.images && (
-                  <img
-                    src={`${current?.images[0]}`}
-                    srcSet={`${current?.images[0]}`}
-                    alt={current?.title}
-                    loading="lazy"
-                    onClick={() => {
-                      //console.log(`key:: ${currentkey}`);
-                      setOneElementId(current._id);
-                      setCurrentView(E_Screens.SALT_WATER_FISH_CARD);
-                    }}
-                  />
+                <>{current.enName}</>
+
+                {current?.images ? (
+                  <div style={{ minHeight: "100px" }}>
+                    <img
+                      src={`${getItemImage(current?.images[0])}`}
+                      srcSet={`${getItemImage(current?.images[0])}`}
+                      alt={current?.title}
+                      loading="lazy"
+                      onClick={() => {
+                        //console.log(`key:: ${currentkey}`);
+                        setOneElementId(current._id);
+                        setCurrentView(E_Screens.SALT_WATER_FISH_CARD);
+                      }}
+                    />
+                  </div>
+                ) : (
+                  <div style={{ minWidth: "100px", minHeight: "100px" }}></div>
                 )}
 
                 <ImageListItemBar
